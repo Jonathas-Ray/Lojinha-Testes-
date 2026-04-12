@@ -1,18 +1,23 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# --- Configurações de Ambiente (Segurança) ---
+.env
+# Não ignore o arquivo de exemplo
+!.env.example
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
+# --- Java / Maven (Backend) ---
+**/target/
+*.log
+**/.mvn/
+
+# --- IDEs (Ambiente de Desenvolvimento) ---
+.idea/
 *.iml
-*.ipr
-
-### VS Code ###
 .vscode/
 
-.env
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
+
+# --- Frontend ---
+# Se futuramente usar Node.js/Vue/Tailwind, estas linhas já protegem...
+**/node_modules/
+**/dist/

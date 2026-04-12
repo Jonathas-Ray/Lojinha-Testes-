@@ -1,13 +1,13 @@
 services:
   db:
-    image: mysql:9.0 # Versão atualizada para 2026
+    image: mysql:9.0
     container_name: lojinha-db
     restart: always
     environment:
-      MYSQL_DATABASE: lojinha_db
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_USER: demon_user
-      MYSQL_PASSWORD: demon_password
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     healthcheck:
@@ -16,7 +16,7 @@ services:
       retries: 10
 
   app:
-    build: .
+    build: ./backend
     container_name: lojinha-app
     ports:
       - "8080:8080"
@@ -24,7 +24,15 @@ services:
       db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/lojinha_db?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=demon_user
-      - SPRING_DATASOURCE_PASSWORD=demon_password
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  frontend:
+    build: ./frontend
+    container_name: lojinha-front
+    ports:
+      - "80:80"
+    depends_on:
+      - app
