@@ -1,0 +1,8 @@
+package org.example.demon.io.produtoModule;
+
+import org.example.demon.io.models.Produto;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
+
+}
