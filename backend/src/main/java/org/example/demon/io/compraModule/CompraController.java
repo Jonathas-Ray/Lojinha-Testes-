@@ -12,7 +12,6 @@ public class CompraController {
     @Autowired
     private CompraService compraService;
 
-    // Rota para finalizar a compra de uma lista de produtos
     @PostMapping("/finalizar")
     public ResponseEntity<String> finalizar(@RequestBody List<Integer> produtosIds) {
         try {

@@ -26,7 +26,6 @@ public class ProdutoController {
         return produtoService.buscarTodos();
     }
 
-    // Rota de Delete com Sudo Mode
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletar(@PathVariable int id, @RequestBody LoginDto loginDto) {
         try {
