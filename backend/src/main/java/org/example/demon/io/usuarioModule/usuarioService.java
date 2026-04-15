@@ -6,9 +6,11 @@ import org.example.demon.io.commonModule.LoginDto;
 import org.example.demon.io.models.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 //criar metodos findBy
+@Service
 public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;

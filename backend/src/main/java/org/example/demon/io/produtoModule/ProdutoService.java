@@ -10,7 +10,9 @@ import org.example.demon.io.usuarioModule.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
