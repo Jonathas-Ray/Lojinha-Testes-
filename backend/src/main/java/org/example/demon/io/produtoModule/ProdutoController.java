@@ -27,12 +27,12 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletar(@PathVariable int id, @RequestBody LoginDto loginDto) {
-        try {
-            produtoService.deletarProduto(loginDto, id);
-            return ResponseEntity.ok("Produto removido!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(403).body(e.getMessage());
+        public ResponseEntity<String> deletar(@PathVariable int id, @RequestParam String senhaConfirmacao) {
+            try {
+                produtoService.deletarProdutoCorrigido(id, senhaConfirmacao);
+                return ResponseEntity.ok("Produto removido!");
+            } catch (RuntimeException e) {
+                return ResponseEntity.status(403).body(e.getMessage());
+            }
         }
-    }
 }
