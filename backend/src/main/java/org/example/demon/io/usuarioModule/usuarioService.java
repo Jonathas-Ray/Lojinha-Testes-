@@ -4,12 +4,16 @@ import java.util.Optional;
 
 import org.example.demon.io.commonModule.LoginDto;
 import org.example.demon.io.models.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 //criar metodos findBy
 public class UsuarioService {
+    @Autowired
     UsuarioRepository usuarioRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     public void salvar(UsuarioDtoEntry dto) {
@@ -28,6 +32,7 @@ public class UsuarioService {
 
         String senhaCriptografada = passwordEncoder.encode(dto.getSenha());
         novoUsuario.setSenha(senhaCriptografada);
+        usuarioRepository.save(novoUsuario);
     }
 
     public boolean verificarLogin(LoginDto dto) {
