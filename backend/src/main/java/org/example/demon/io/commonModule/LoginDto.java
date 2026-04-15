@@ -1,4 +1,4 @@
-package org.example.demon.io.usuarioModule;
+package org.example.demon.io.commonModule;
 
 public class LoginDto {
     private String email;

@@ -2,11 +2,13 @@ package org.example.demon.io.usuarioModule;
 
 import java.util.Optional;
 
+import org.example.demon.io.commonModule.LoginDto;
 import org.example.demon.io.models.Usuario;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-public class usuarioService {
+//criar metodos findBy
+public class UsuarioService {
     UsuarioRepository usuarioRepository;
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -41,6 +43,12 @@ public class usuarioService {
             throw new RuntimeException("SENHA INCORRETA!");
         }
         return true;
+    }
+
+    public Usuario buscarPorEmail(String email) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+
+        return usuario.orElse(null);
     }
 
     public void deletar(LoginDto dto) {
