@@ -40,18 +40,25 @@ public class ProdutoService {
         produtoRepository.save(produto);
     }
 
-    public void deletarProduto(LoginDto dto, int id) {
-        String emailLogado = SecurityContextHolder.getContext().getAuthentication().getName();
-        Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto Não Encontrado"));
+    public void deletarProdutoCorrigido(int id, String senha) {
+    String emailLogado = SecurityContextHolder.getContext().getAuthentication().getName();
+    Produto produto = produtoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Produto Não Encontrado"));
 
-        if (!produto.getVendedor().getEmail().equals(emailLogado) || !dto.getEmail().equals(emailLogado)) {
-            throw new RuntimeException("VOCÊ NÃO TEM PERMISSÃO DE EXCLUIR PRODUTO DE OUTRA PESSOA");
-        }
-
-        usuarioService.verificarLogin(dto);
-        produtoRepository.delete(produto);
+    if (!produto.getVendedor().getEmail().equals(emailLogado)) {
+        throw new RuntimeException("VOCÊ NÃO TEM PERMISSÃO DE EXCLUIR PRODUTO DE OUTRA PESSOA");
     }
+
+    
+
+    // Mantendo sua lógica de re-autenticação antes de deletar
+    LoginDto loginDto = new LoginDto();
+    loginDto.setEmail(emailLogado);
+    loginDto.setSenha(senha);
+    usuarioService.verificarLogin(loginDto);
+
+    produtoRepository.delete(produto);
+}
 
     public List<Produto> buscarTodos() {
         return produtoRepository.findAll();
