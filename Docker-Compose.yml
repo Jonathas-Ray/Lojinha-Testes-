@@ -4,12 +4,16 @@ services:
     container_name: lojinha-db
     restart: always
     environment:
-      MYSQL_DATABASE: lojinha_db
-      MYSQL_ROOT_PASSWORD: root
+      # Valores puxados do seu .env
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-proot"]
+      # Atualizado para usar a senha do root definida no seu .env
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       timeout: 5s
       retries: 10
 
@@ -22,10 +26,12 @@ services:
       db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://lojinha-db:3306/lojinha_db?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
+      # Conecta usando as credenciais do usuário 'demon_user' do .env
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
 
   frontend:
     build: ./frontend
