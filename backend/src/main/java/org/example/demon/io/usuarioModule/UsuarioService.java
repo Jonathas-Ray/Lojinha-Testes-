@@ -16,19 +16,19 @@ public class UsuarioService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public void salvar(UsuarioDtoEntry dto) {
-        if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Este e-mail já está sendo utilizado!");
-        }
-
-        Usuario usuario = new Usuario();
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setTipo(dto.getTipo());
-        // Criptografa a senha antes de persistir no banco
-        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
-        
-        usuarioRepository.save(usuario);
+    if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
+        throw new RuntimeException("Este e-mail já está sendo utilizado!");
     }
+
+    Usuario usuario = new Usuario();
+    usuario.setNome(dto.getNome());
+    usuario.setEmail(dto.getEmail());
+    usuario.setTelefone(dto.getTelefone()); // ADICIONADO: Mapeamento do DTO para a Entidade
+    usuario.setTipo(dto.getTipo());
+    usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+    
+    usuarioRepository.save(usuario);
+}
 
     public void verificarLogin(LoginDto dto) {
         Usuario usuario = usuarioRepository.findByEmail(dto.getEmail())

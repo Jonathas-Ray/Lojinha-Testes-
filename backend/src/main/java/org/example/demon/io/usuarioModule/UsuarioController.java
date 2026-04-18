@@ -4,6 +4,7 @@ import org.example.demon.io.commonModule.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -13,7 +14,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody UsuarioDtoEntry dto) {
+    public ResponseEntity<String> cadastrar(@Valid @RequestBody UsuarioDtoEntry dto) {
         try {
             usuarioService.salvar(dto);
             return ResponseEntity.status(201).body("Usuário cadastrado com sucesso!");

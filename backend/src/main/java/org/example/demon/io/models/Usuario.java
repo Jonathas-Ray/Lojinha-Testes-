@@ -8,6 +8,7 @@ import org.example.demon.io.commonModule.enums.TipoUsuario;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,8 +26,10 @@ public class Usuario {
     private int id;
 
     private String nome;
+    @Column(unique = true, nullable = false)
     private String email;
     private String senha;
+    private String telefone; // ADICIONADO: Campo Telefone
 
     private boolean ativo = true;
 
@@ -41,77 +44,22 @@ public class Usuario {
     @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL)
     private List<Produto> produtosVendendo = new ArrayList<>();
 
-    public Usuario(String nome, String email, TipoUsuario tipo) {
-        this.nome = nome;
-        this.email = email;
-        this.tipo = tipo;
-    }
+    public Usuario() {}
 
-    public Usuario() {
-    }
+    // Getters e Setters (Mantendo os outros e adicionando o novo)
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public TipoUsuario getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoUsuario tipo) {
-        this.tipo = tipo;
-    }
-
-    public List<Compra> getCompras() {
-        return compras;
-    }
-
-    public void setCompras(List<Compra> compras) {
-        this.compras = compras;
-    }
-
-    public List<Produto> getProdutosVendendo() {
-        return produtosVendendo;
-    }
-
-    public void setProdutosVendendo(List<Produto> produtosVendendo) {
-        this.produtosVendendo = produtosVendendo;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+    public TipoUsuario getTipo() { return tipo; }
+    public void setTipo(TipoUsuario tipo) { this.tipo = tipo; }
+    public boolean isAtivo() { return ativo; }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 }

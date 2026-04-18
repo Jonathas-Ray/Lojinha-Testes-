@@ -1,28 +1,33 @@
 import axios from 'axios';
 
-// Configuração centralizada para usar o proxy do Vite e evitar erros de CORS
 const api = axios.create({
     baseURL: '/api'
 });
 
+// Interceptor para injetar Basic Auth em cada chamada automática
+api.interceptors.request.use(config => {
+    const auth = localStorage.getItem('user_auth');
+    if (auth) {
+        config.headers.Authorization = `Basic ${auth}`;
+    }
+    return config;
+});
+
 export const authService = {
-    // Mantendo seu método de Basic Auth para o Spring Security
-    login(email, senha) {
+    async login(email, senha) {
         const auth = btoa(`${email}:${senha}`);
-        return api.post('/usuarios/login', {}, {
+        const res = await api.post('/usuarios/login', {}, {
             headers: { 'Authorization': `Basic ${auth}` }
         });
+        // Salva para persistir o login entre as telas
+        localStorage.setItem('user_auth', auth);
+        return res;
     }
 };
 
 export const produtoService = {
-    listar() {
-        return api.get('/produtos');
-    },
-    // Necessário implementar o CRUD do Vendedor ainda
-    criar(produtoDto) {
-        return api.post('/produtos', produtoDto);
-    }
+    listar: () => api.get('/produtos'),
+    criar: (dto) => api.post('/produtos', dto)
 };
 
 export default api;
