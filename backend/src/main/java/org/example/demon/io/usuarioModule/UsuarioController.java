@@ -33,6 +33,19 @@ public class UsuarioController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> removerUsuario(@PathVariable int id) {
+        try {
+            usuarioService.remover(id);
+            return ResponseEntity.ok("Usuário removido com sucesso!");
+        } catch (SecurityException e) {
+            // Retorna 403 Forbidden para erros de permissão
+            return ResponseEntity.status(403).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PatchMapping("/desativar")
     public ResponseEntity<String> desativarConta(@RequestBody LoginDto dto) {
         try {

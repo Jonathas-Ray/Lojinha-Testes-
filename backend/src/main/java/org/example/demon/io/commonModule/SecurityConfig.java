@@ -13,12 +13,13 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Desabilita para facilitar os testes via Postman
+        http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/usuarios/cadastrar", "/usuarios/login").permitAll() // Público
-                        .anyRequest().authenticated() // Todo o resto exige login
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/produtos").permitAll() 
+                        .requestMatchers("/usuarios/cadastrar", "/usuarios/login").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Permite autenticação básica para testes
+                .httpBasic(Customizer.withDefaults());
         return http.build();
     }
 }

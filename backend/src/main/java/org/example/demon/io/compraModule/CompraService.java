@@ -23,31 +23,22 @@ public class CompraService {
     private UsuarioService usuarioService;
 
     @Transactional
-    public void finalizarCompra(List<Integer> produtosIds) {
+public void finalizarCompra(List<Integer> produtosIds) {
+    String emailLogado = SecurityContextHolder.getContext().getAuthentication().getName();
+    Usuario comprador = usuarioService.buscarPorEmail(emailLogado);
 
-        String emailLogado = SecurityContextHolder.getContext().getAuthentication().getName();
-        Usuario comprador = usuarioService.buscarPorEmail(emailLogado);
+    List<Produto> produtosParaComprar = produtoRepository.findAllById(produtosIds);
 
-        Compra compra = new Compra();
-        compra.setComprador(comprador);
-
-        List<Produto> produtosParaComprar = produtoRepository.findAllById(produtosIds);
-
-        if (produtosParaComprar.isEmpty()) {
-            throw new RuntimeException("O carrinho está vazio ou os produtos não existem!");
+    for (Produto produto : produtosParaComprar) {
+        if (produto.getEstoque() <= 0) {
+            throw new RuntimeException("O produto " + produto.getNome() + " está esgotado!");
         }
-
-        for (Produto produto : produtosParaComprar) {
-
-            if (produto.getCompra() != null) {
-                throw new RuntimeException("O produto " + produto.getNome() + " já foi vendido!");
-            }
-
-            produto.setCompra(compra);
-        }
-
-        compra.setProdutos(produtosParaComprar);
-
-        compraRepository.save(compra);
+        produto.setEstoque(produto.getEstoque() - 1); 
     }
+
+    Compra compra = new Compra();
+    compra.setComprador(comprador);
+    compra.setProdutos(produtosParaComprar);
+    compraRepository.save(compra);
+}
 }

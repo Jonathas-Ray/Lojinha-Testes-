@@ -4,6 +4,8 @@ public class ProdutoDto {
     private String nome;
     private String descricao;
     private float preco;
+    private int estoque;
+    private String tipo;
 
     public ProdutoDto() {
 
@@ -31,6 +33,22 @@ public class ProdutoDto {
 
     public void setPreco(float preco) {
         this.preco = preco;
+    }
+
+    public int getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(int estoque) {
+        this.estoque = estoque;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
 }
