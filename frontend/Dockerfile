@@ -1,12 +1,15 @@
-FROM node:18-alpine AS build-stage
+# Estágio 1: Build
+FROM node:20-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
-# 'npm ci' para garantir que as versões do lock sejam respeitadas
-RUN npm ci
+RUN npm install
 COPY . .
 RUN npm run build
 
+# Estágio 2: Produção (Nginx)
 FROM nginx:stable-alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+# Copia o seu config do nginx para permitir rotas do Vue e o Proxy da API
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

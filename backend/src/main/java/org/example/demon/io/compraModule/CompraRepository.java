@@ -8,4 +8,4 @@ import org.springframework.stereotype.Repository;
 public interface CompraRepository extends JpaRepository<Compra, Integer> {
 }
 
-//Saporra é fantasma, não atualiza com nada
+// Saporra é fantasma, não atualiza com nada
