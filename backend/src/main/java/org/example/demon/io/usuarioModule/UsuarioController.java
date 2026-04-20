@@ -34,9 +34,9 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> removerUsuario(@PathVariable int id) {
+    public ResponseEntity<String> removerUsuario(@RequestBody LoginDto dto) {
         try {
-            usuarioService.remover(id);
+            usuarioService.deletar(dto);
             return ResponseEntity.ok("Usuário removido com sucesso!");
         } catch (SecurityException e) {
             // Retorna 403 Forbidden para erros de permissão
