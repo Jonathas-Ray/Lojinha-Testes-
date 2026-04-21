@@ -6,10 +6,15 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Estágio 2: Produção (Nginx)
 FROM nginx:stable-alpine
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-# Copia o seu config do nginx para permitir rotas do Vue e o Proxy da API
+
+# Copia os 3 arquivos diretamente para o Nginx
+COPY index.html  /usr/share/nginx/html/index.html
+COPY style.css   /usr/share/nginx/html/style.css
+COPY app.js      /usr/share/nginx/html/app.js
+
+# Mantém o mesmo nginx.conf que já funciona
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
