@@ -32,7 +32,9 @@ async function apiRequest(method, path, body = null, overrideAuth = null) {
   if (auth) headers['Authorization'] = `Basic ${auth}`;
 
   const options = { method, headers };
-  if (body !== null) options.body = JSON.stringify(body);
+  if (body !== null && Object.keys(body).length > 0) { // Só envia se o objeto não estiver vazio
+    options.body = JSON.stringify(body);
+}
 
   const response = await fetch(BASE_URL + path, options);
   const text = await response.text();
@@ -59,26 +61,33 @@ async function doLogin() {
     return;
   }
 
-  btn.disabled    = true;
+  btn.disabled = true;
   btn.textContent = 'Entrando...';
-  hideAlert(alert);
 
   try {
-    const auth = btoa(`${email}:${senha}`);
-    await apiRequest('POST', '/usuarios/login', {}, auth);
+    // 1. Enviamos APENAS o JSON, sem o 'auth' no final para não confundir o Spring
+    const loginData = { email: email, senha: senha };
+    
+    // Note que aqui passamos 'null' no lugar do overrideAuth
+    await apiRequest('POST', '/usuarios/login', loginData, null);
 
-    localStorage.setItem('user_auth',  auth);
+    // 2. Se o servidor respondeu 200 OK, agora sim salvamos as credenciais
+    const auth = btoa(`${email}:${senha}`);
+    localStorage.setItem('user_auth', auth);
     localStorage.setItem('user_email', email);
 
     state.user = { email, auth };
     onLoginSuccess();
   } catch (e) {
-    showAlert(alert, e.data || 'E-mail ou senha incorretos.');
+    // Se der erro 400 ou 401, ele cai aqui
+    showAlert(alert, 'E-mail ou senha incorretos.');
+    console.error("Erro detalhado:", e.data); // Olhe isso no F12 para ver o que o Java respondeu
   } finally {
-    btn.disabled    = false;
+    btn.disabled = false;
     btn.textContent = 'Entrar na Lojinha';
   }
 }
+
 
 async function doCadastro() {
   const nome     = document.getElementById('cad-nome').value.trim();
